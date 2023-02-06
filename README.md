@@ -16,14 +16,15 @@ with everyone's bank accounts, allowing customers to purchase products from thei
     > ```
 3. The vending machine reads its inventory from an input file when the vending machine
 starts.
-4. The vending machine is automatically restocked each time the application runs.
-5. When the customer selects "(1) Display Vending Machine Items", they're presented
+4. The vending machine will be empty and must load a fresh inventory each time the application runs.
+5. You may assume the vending machine does not stock different products in the same slot.
+6. When the customer selects "(1) Display Vending Machine Items", they're presented
 with a list of all items in the vending machine with its quantity remaining:
     - Each vending machine product has a slot identifier and a purchase price.
     - Each slot in the vending machine has enough room for 5 of that product.
     - Every product is initially stocked to the maximum amount.
     - A product that has run out must indicate that it's SOLD OUT.
-6. When the customer selects "(2) Purchase", they're guided through the purchasing
+7. When the customer selects "(2) Purchase", they're guided through the purchasing
 process menu:
     ```
     Current Money Provided: $2.00
@@ -33,7 +34,7 @@ process menu:
     (3) Finish Transaction
     
     ```
-7. The purchase process flow is as follows:
+8. The purchase process flow is as follows:
     1. Selecting "(1) Feed Money" allows the customer to repeatedly feed money into the
     machine in whole dollar amounts.
         - The "Current Money Provided" indicates how much money the customer
@@ -62,7 +63,7 @@ process menu:
         - The machine's current balance updates to $0 remaining.
     4. After completing their purchase, the user returns to the "Main" menu to
     continue using the vending machine.
-8. The vending machine logs all transactions to prevent theft from the vending machine.
+9. The vending machine logs all transactions to prevent theft from the vending machine.
    - Each purchase must generate a line in a file called `Log.txt`.
    - The lines must follow the format shown in the following example.
        - The first dollar amount is the amount deposited, spent, or given as change.
@@ -74,14 +75,14 @@ process menu:
         01/01/2019 12:01:25 PM Cowtales B2 $1.50 $6.75 
         01/01/2019 12:01:35 PM GIVE CHANGE: $6.75 $0.00
         ```
-9. Create as many of your classes as possible to be "testable" classes. Limit console
+10. Create as many of your classes as possible to be "testable" classes. Limit console
 input and output to as few classes as possible.
-10. Optional - Sales Report
+11. Optional - Sales Report
     - Provide a "Hidden" menu option on the main menu ("4") that writes to a sales
     report that shows the total sales since the machine started. The name of the
     file must include the date and time so each sales report is uniquely named.
     - An example of the output format appears at the end of this file.
-11. Provide unit tests demonstrating that your code works correctly.
+12. Provide unit tests demonstrating that your code works correctly.
 ___
 ### Vending machine data file
 The input file that stocks the vending machine products is a pipe `|` delimited file. Each line is a separate product in the file and follows this format:
