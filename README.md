@@ -50,10 +50,10 @@ process menu:
         - If a customer selects a valid product, it's dispensed to the customer.
         - Dispensing an item prints the item name, cost, and the money
         remaining. Dispensing also returns a message:
-          - All chip items print "Crunch Crunch, Yum!"
-          - All candy items print "Munch Munch, Yum!"
-          - All drink items print "Glug Glug, Yum!"
-          - All gum items print "Chew Chew, Yum!"
+          - All chip items print "Crunch Crunch, It's Yummy!"
+          - All candy items print "Munch Munch, Mmm Mmm Good!"
+          - All drink items print "Glug Glug, Chug Chug!"
+          - All gum items print "Chew Chew, Pop!"
         - After the machine dispenses the product, the machine must update its balance
         accordingly and return the customer to the Purchase menu.
     3. Selecting "(3) Finish Transaction" allows the customer to complete the

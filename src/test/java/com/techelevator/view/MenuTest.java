@@ -9,8 +9,6 @@ import org.junit.Test;
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
 
-import com.techelevator.view.Menu;
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MenuTest {
 
@@ -24,7 +22,7 @@ public class MenuTest {
 	@Test
 	public void displays_a_list_of_menu_options_and_prompts_user_to_make_a_choice() {
 		Object[] options = new Object[] { Integer.valueOf(3), "Blind", "Mice" };
-		Menu menu = getMenuForTesting();
+		VendingMenu menu = getMenuForTesting();
 
 		menu.getChoiceFromOptions(options);
 
@@ -37,7 +35,7 @@ public class MenuTest {
 	public void returns_object_corresponding_to_user_choice() {
 		Integer expected = Integer.valueOf(456);
 		Integer[] options = new Integer[] { Integer.valueOf(123), expected, Integer.valueOf(789) };
-		Menu menu = getMenuForTestingWithUserInput("2" + System.lineSeparator());
+		VendingMenu menu = getMenuForTestingWithUserInput("2" + System.lineSeparator());
 
 		Integer result = (Integer) menu.getChoiceFromOptions(options);
 
@@ -47,7 +45,7 @@ public class MenuTest {
 	@Test
 	public void redisplays_menu_if_user_does_not_choose_valid_option() {
 		Object[] options = new Object[] { "Larry", "Curly", "Moe" };
-		Menu menu = getMenuForTestingWithUserInput("4" + System.lineSeparator() + "1" + System.lineSeparator());
+		VendingMenu menu = getMenuForTestingWithUserInput("4" + System.lineSeparator() + "1" + System.lineSeparator());
 
 		menu.getChoiceFromOptions(options);
 
@@ -62,7 +60,7 @@ public class MenuTest {
 	@Test
 	public void redisplays_menu_if_user_chooses_option_less_than_1() {
 		Object[] options = new Object[] { "Larry", "Curly", "Moe" };
-		Menu menu = getMenuForTestingWithUserInput("0" + System.lineSeparator() + "1" + System.lineSeparator());
+		VendingMenu menu = getMenuForTestingWithUserInput("0" + System.lineSeparator() + "1" + System.lineSeparator());
 
 		menu.getChoiceFromOptions(options);
 
@@ -77,7 +75,7 @@ public class MenuTest {
 	@Test
 	public void redisplays_menu_if_user_enters_garbage() {
 		Object[] options = new Object[] { "Larry", "Curly", "Moe" };
-		Menu menu = getMenuForTestingWithUserInput("Mickey Mouse" + System.lineSeparator() + "1" + System.lineSeparator());
+		VendingMenu menu = getMenuForTestingWithUserInput("Mickey Mouse" + System.lineSeparator() + "1" + System.lineSeparator());
 
 		menu.getChoiceFromOptions(options);
 
@@ -89,12 +87,12 @@ public class MenuTest {
 		Assert.assertEquals(expected, output.toString());
 	}
 
-	private Menu getMenuForTestingWithUserInput(String userInput) {
+	private VendingMenu getMenuForTestingWithUserInput(String userInput) {
 		ByteArrayInputStream input = new ByteArrayInputStream(String.valueOf(userInput).getBytes());
-		return new Menu(input, output);
+		return new VendingMenu(input, output);
 	}
 
-	private Menu getMenuForTesting() {
+	private VendingMenu getMenuForTesting() {
 		return getMenuForTestingWithUserInput("1" + System.lineSeparator());
 	}
 }

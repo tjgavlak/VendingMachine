@@ -1,16 +1,26 @@
 package com.techelevator;
 
-import com.techelevator.view.Menu;
+import com.techelevator.view.VendingMenu;
+
+
 
 public class VendingMachineCLI {
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
 	private static final String MAIN_MENU_OPTION_PURCHASE = "Purchase";
-	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE };
+	private static final String MAIN_MENU_OPTION_EXIT = "Exit";
+	private static final String MAIN_MENU_SECRET_OPTION = "*Sales Report";
 
-	private Menu menu;
+	private static final String PURCHASE_MENU_OPTION_FEED_MONEY = "Feed Money";
+	private static final String PURCHASE_MENU_OPTION_SELECT_PRODUCT = "Select Product";
+	private static final String PURCHASE_MENU_OPTION_FINISH_TRANSACTION = "Finish Transaction";
 
-	public VendingMachineCLI(Menu menu) {
+	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT, MAIN_MENU_SECRET_OPTION };
+	private static final String[] PURCHASE_MENU_OPTIONS = { PURCHASE_MENU_OPTION_FEED_MONEY, PURCHASE_MENU_OPTION_SELECT_PRODUCT, PURCHASE_MENU_OPTION_FINISH_TRANSACTION};
+
+	private VendingMenu menu;
+
+	public VendingMachineCLI(VendingMenu menu) {
 		this.menu = menu;
 	}
 
@@ -29,7 +39,7 @@ public class VendingMachineCLI {
 	}
 
 	public static void main(String[] args) {
-		Menu menu = new Menu(System.in, System.out);
+		VendingMenu menu = new VendingMenu(System.in, System.out);
 		VendingMachineCLI cli = new VendingMachineCLI(menu);
 		cli.run();
 	}
