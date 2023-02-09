@@ -28,7 +28,7 @@ public class VendingMachineCLI {
 	private static final String FEED_ONE = "Add $1.00";
 	private static final String FEED_TWO = "Add $2.00";
 	private static final String FEED_FIVE = "Add $5.00";
-	private static final String FEED_QUIT = "Return to Main Menu";
+	private static final String FEED_QUIT = "Return to Purchase Menu";
 	private static final String[] FEED_MENU_OPTIONS = {FEED_ONE, FEED_TWO, FEED_FIVE, FEED_QUIT};
 
 
@@ -42,6 +42,7 @@ public class VendingMachineCLI {
 	}
 
 	VendingMachineChoices snackChoices = new VendingMachineChoices();
+	Map<String, Product> inventory = snackChoices.getMapOfProduct();
 	CustomerMoney currentTransaction = new CustomerMoney();
 
 	File logFile = new File("log.txt"); // TODO consider making a logger class to handle this
@@ -71,16 +72,16 @@ public class VendingMachineCLI {
 	}
 
 	public void displayItems() {
-		System.out.println("Choices: " + snackChoices.getSnackChoices().size());
-		for (String snack : snackChoices.getSnackChoices().keySet()) {
-			String slot = snackChoices.getSnackChoices().get(snack).getSlot();
-			String name = snackChoices.getSnackChoices().get(snack).getName();
-			double price = snackChoices.getSnackChoices().get(snack).getPrice(); //TODO BigDecimal for money
+		System.out.println("Choices: ");
+		for (String snack : inventory.keySet()) {
+			String slot = inventory.get(snack).getSlot();
+			String name = inventory.get(snack).getName();
+			double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
 
-			System.out.println(slot + " + " + name + " : " + price);
+			System.out.println(slot + " | " + name + " | " + price);
 
-			if (snackChoices.getSnackChoices().get(snack).getQuantity() > 0) {
-				System.out.println("Available: " + snackChoices.getSnackChoices().get(snack).getQuantity());
+			if (inventory.get(snack).getQuantity() > 0) {
+				System.out.println("Available: " + inventory.get(snack).getQuantity());
 			} else {
 				System.out.println("SOLD OUT");
 			}
@@ -113,12 +114,16 @@ public class VendingMachineCLI {
 					}
 					return;
 				} else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
-					for (String snack : snackChoices.getSnackChoices().keySet()) {
-						System.out.println(" " + snackChoices.getSnackChoices().get(snack).getSlot() + " | ");
-						System.out.println(" " + snackChoices.getSnackChoices().get(snack).getName() + " | ");
-						System.out.println(" " + snackChoices.getSnackChoices().get(snack).getPrice() + " | ");
-						if (snackChoices.getSnackChoices().get(snack).getQuantity() > 0) {
-							System.out.println("Available: " + snackChoices.getSnackChoices().get(snack).getQuantity());
+					System.out.println("Choices: ");
+					for (String snack : inventory.keySet()) {
+						String slot = inventory.get(snack).getSlot();
+						String name = inventory.get(snack).getName();
+						double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+
+						System.out.println(slot + " | " + name + " | " + price);
+
+						if (inventory.get(snack).getQuantity() > 0) {
+							System.out.println("Available: " + inventory.get(snack).getQuantity());
 						} else {
 							System.out.println("SOLD OUT");
 						}

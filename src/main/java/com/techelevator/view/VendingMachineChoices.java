@@ -2,21 +2,14 @@ package com.techelevator.view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class VendingMachineChoices {
 
-    Map<String, Product> snackChoices;
-
-    public VendingMachineChoices() throws FileNotFoundException {
-        snackChoices = getMapOfProduct();
-    }
-
-    public Map<String, Product> getSnackChoices() {
-        return snackChoices;
-    }
+    private Map<String, Product> snackChoices = new LinkedHashMap<>();
 
     public Map<String, Product> getMapOfProduct() throws FileNotFoundException {
         String fileName = "vendingmachine.csv";
