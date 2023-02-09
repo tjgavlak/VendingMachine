@@ -30,7 +30,12 @@ public class VendingMachineCLI {
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
 			// A switch statement could also be used here.  Your choice.
-			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
+			switch (choice) {
+				case MAIN_MENU_OPTION_DISPLAY_ITEMS:
+					displayItems();
+					break;
+				case MAIN_MENU_OPTION_PURCHASE:
+					purchaseIems();
 				// display vending machine items
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase

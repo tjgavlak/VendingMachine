@@ -1,15 +1,14 @@
 package com.techelevator.view;
 
-public class Nickel implements Coin{
+public class Quarter implements Coin{
 
     @Override
     public String getName() {
-        return "Nickel";
-
+        return "Quarter";
     }
 
     @Override
     public int getValue() {
-        return 5;
+        return 25;
     }
 }
