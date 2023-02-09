@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -40,10 +41,10 @@ public class VendingMachineCLI {
 		this.menu = menu;
 	}
 
-	public static VendingMachineChoices snackChoices;
+	VendingMachineChoices snackChoices = new VendingMachineChoices();
 	CustomerMoney currentTransaction = new CustomerMoney();
 
-	File logFile = new File("log.txt");
+	File logFile = new File("log.txt"); // TODO consider making a logger class to handle this
 	Scanner scanner = new Scanner(System.in);
 
 	public void run() throws IOException {
@@ -69,12 +70,15 @@ public class VendingMachineCLI {
 		return;
 	}
 
-	public void displayItems() throws FileNotFoundException {
+	public void displayItems() {
 		System.out.println("Choices: " + snackChoices.getSnackChoices().size());
 		for (String snack : snackChoices.getSnackChoices().keySet()) {
-			System.out.println(" " + snackChoices.getSnackChoices().get(snack).getSlot() + " | ");
-			System.out.println(" " + snackChoices.getSnackChoices().get(snack).getName() + " | ");
-			System.out.println(" " + snackChoices.getSnackChoices().get(snack).getPrice() + " | ");
+			String slot = snackChoices.getSnackChoices().get(snack).getSlot();
+			String name = snackChoices.getSnackChoices().get(snack).getName();
+			double price = snackChoices.getSnackChoices().get(snack).getPrice(); //TODO BigDecimal for money
+
+			System.out.println(slot + " + " + name + " : " + price);
+
 			if (snackChoices.getSnackChoices().get(snack).getQuantity() > 0) {
 				System.out.println("Available: " + snackChoices.getSnackChoices().get(snack).getQuantity());
 			} else {
