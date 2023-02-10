@@ -28,12 +28,13 @@ public class VendingMachineCLI {
 	private static final String FEED_ONE = "Add $1.00";
 	private static final String FEED_TWO = "Add $2.00";
 	private static final String FEED_FIVE = "Add $5.00";
-	private static final String FEED_QUIT = "Return to Purchase Menu";
-	private static final String[] FEED_MENU_OPTIONS = {FEED_ONE, FEED_TWO, FEED_FIVE, FEED_QUIT};
+	//private static final String FEED_QUIT = "Return to Purchase Menu";
+	private static final String[] FEED_MENU_OPTIONS = {FEED_ONE, FEED_TWO, FEED_FIVE, PURCHASE_MENU_OPTION_SELECT_PRODUCT};
 
 
-	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT, MAIN_MENU_SECRET_OPTION };
-	private static final String[] PURCHASE_MENU_OPTIONS = { PURCHASE_MENU_OPTION_FEED_MONEY, PURCHASE_MENU_OPTION_SELECT_PRODUCT, PURCHASE_MENU_OPTION_FINISH_TRANSACTION};
+	private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT, MAIN_MENU_SECRET_OPTION};
+	private static final String[] PURCHASE_MENU_OPTIONS = {PURCHASE_MENU_OPTION_FEED_MONEY, PURCHASE_MENU_OPTION_SELECT_PRODUCT, PURCHASE_MENU_OPTION_FINISH_TRANSACTION};
+	private static final String[] PRODUCT_OPTIONS = {};
 
 	private VendingMenu menu;
 
@@ -63,14 +64,12 @@ public class VendingMachineCLI {
 					break;
 				// display vending machine items
 				case MAIN_MENU_OPTION_EXIT:
-					//end();
 					running = false;
 					break;
 			}
 		}
-		return;
 	}
-
+	// Runs when user chooses to display items from main menu
 	public void displayItems() {
 		System.out.println("Choices: ");
 		for (String snack : inventory.keySet()) {
@@ -87,45 +86,75 @@ public class VendingMachineCLI {
 			}
 		}
 	}
-
+	// Runs when user chooses to make purchase
 	public void purchaseItems() throws IOException {
+		Scanner userInput = new Scanner(System.in);
 		try (PrintWriter printToLog = new PrintWriter(logFile)) {
 			System.out.println("Current balance: " + currentTransaction.getBalance());
 			String purchaseMenuOption = String.valueOf(menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS));
-			while (true) {
+			boolean isCustomer = true;
+			while (isCustomer) {
+				// User choice to feed money, select product, or finish transaction
 				if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FEED_MONEY)) {
-					while (true) {
+					while (isCustomer) {
 						System.out.println("Current balance: " + currentTransaction.getBalance());
 						String feedMoneyOptions = String.valueOf(menu.getChoiceFromOptions(FEED_MENU_OPTIONS));
 						double add = 0;
-						if (feedMoneyOptions.equals(FEED_ONE)) {
-							currentTransaction.addMoney(1.00);
-							add += 1.00;
-						} else if (feedMoneyOptions.equals(FEED_TWO)) {
-							currentTransaction.addMoney(2.00);
-							add += 2.00;
-						} else if (feedMoneyOptions.equals(FEED_FIVE)) {
-							currentTransaction.addMoney(5.00);
-							add += 5.00;
-						} else if (feedMoneyOptions.equals(FEED_QUIT)) {
-							System.out.println("Transaction aborted.");
-							break;
+						switch (feedMoneyOptions) {
+							case FEED_ONE:
+								currentTransaction.addMoney(1.00);
+								add += 1.00;
+								break;
+							case FEED_TWO:
+								currentTransaction.addMoney(2.00);
+								add += 2.00;
+								break;
+							case FEED_FIVE:
+								currentTransaction.addMoney(5.00);
+								add += 5.00;
+								break;
+							case PURCHASE_MENU_OPTION_SELECT_PRODUCT: // User is done adding money, ready to purchase
+								System.out.println("Choices: ");
+								for (String snack : inventory.keySet()) {
+									String slot = inventory.get(snack).getSlot();
+									String name = inventory.get(snack).getName();
+									double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+
+									System.out.println(slot + " | " + name + " | " + price);
+
+									if (inventory.get(snack).getQuantity() > 0) {
+										System.out.println("Available: " + inventory.get(snack).getQuantity());
+									} else {
+										System.out.println("SOLD OUT");
+									}
+								}
+								System.out.println("Please enter an item number.");
+								String itemChoice = userInput.nextLine().toUpperCase();
+								break;
 						}
 					}
-					return;
+					isCustomer = false;
+
+				// If user choice is Select Product
 				} else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
-					System.out.println("Choices: ");
-					for (String snack : inventory.keySet()) {
-						String slot = inventory.get(snack).getSlot();
-						String name = inventory.get(snack).getName();
-						double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+					// If user balance is 0
+					if (currentTransaction.getBalance() <= 0) {
+						System.out.println("Please give us money.");
+						//purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FEED_MONEY);
+					} else { // If balance is greater than 0
+						System.out.println("Choices: ");
+						for (String snack : inventory.keySet()) {
+							String slot = inventory.get(snack).getSlot();
+							String name = inventory.get(snack).getName();
+							double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
 
-						System.out.println(slot + " | " + name + " | " + price);
+							System.out.println(slot + " | " + name + " | " + price);
 
-						if (inventory.get(snack).getQuantity() > 0) {
-							System.out.println("Available: " + inventory.get(snack).getQuantity());
-						} else {
-							System.out.println("SOLD OUT");
+							if (inventory.get(snack).getQuantity() > 0) {
+								System.out.println("Available: " + inventory.get(snack).getQuantity());
+							} else {
+								System.out.println("SOLD OUT");
+							}
 						}
 					}
 				}
@@ -133,13 +162,9 @@ public class VendingMachineCLI {
 		}
 	}
 
-
-
-
-
-	public static void main(String[] args) throws Exception {
-		VendingMenu menu = new VendingMenu(System.in, System.out);
-		VendingMachineCLI cli = new VendingMachineCLI(menu);
-		cli.run();
+		public static void main (String[]args) throws Exception {
+			VendingMenu menu = new VendingMenu(System.in, System.out);
+			VendingMachineCLI cli = new VendingMachineCLI(menu);
+			cli.run();
+		}
 	}
-}
