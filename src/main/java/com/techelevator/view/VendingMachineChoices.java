@@ -28,6 +28,7 @@ public class VendingMachineChoices {
                         chips.setSlot(splitLine[0]);
                         chips.setName(splitLine[1]);
                         chips.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
+                        chips.setQuantity(5);
                         snackChoices.put(splitLine[0], chips);
                         break;
                     case 'B':
@@ -35,6 +36,7 @@ public class VendingMachineChoices {
                         candy.setSlot(splitLine[0]);
                         candy.setName(splitLine[1]);
                         candy.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
+                        candy.setQuantity(5);
                         snackChoices.put(splitLine[0], candy);
                         break;
                     case 'C':
@@ -42,6 +44,7 @@ public class VendingMachineChoices {
                         beverages.setSlot(splitLine[0]);
                         beverages.setName(splitLine[1]);
                         beverages.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
+                        beverages.setQuantity(5);
                         snackChoices.put(splitLine[0], beverages);
                         break;
                     case 'D':
@@ -49,6 +52,7 @@ public class VendingMachineChoices {
                         gum.setSlot(splitLine[0]);
                         gum.setName(splitLine[1]);
                         gum.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
+                        gum.setQuantity(5);
                         snackChoices.put(splitLine[0], gum);
                         break;
                 }
