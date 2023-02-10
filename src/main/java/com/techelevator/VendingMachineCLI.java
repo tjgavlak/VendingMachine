@@ -43,6 +43,7 @@ public class VendingMachineCLI {
     VendingMachineChoices snackChoices = new VendingMachineChoices();
     Map<String, Product> inventory = snackChoices.getMapOfProduct();
     CustomerMoney currentTransaction = new CustomerMoney();
+    Double change = Double.parseDouble(String.valueOf(currentTransaction));
     ReturnChange returnChange = new ReturnChange();
 
     File logFile = new File("log.txt"); // TODO consider making a logger class to handle this
@@ -63,6 +64,7 @@ public class VendingMachineCLI {
                     break;
                 // display vending machine items
                 case MAIN_MENU_OPTION_EXIT:
+                    ReturnChange.returnChange(change);
                     running = false;
                     break;
             }
@@ -141,11 +143,15 @@ public class VendingMachineCLI {
                                 Product product = inventory.get(itemChoice);
                                 product.dispenseItem(product);
                                 product.getMessage();
+                                String buyMore = userInput.nextLine();
+                                if (buyMore.equalsIgnoreCase("Y")) {
+                                    purchaseItems();
+                                } else menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
                             }
                         }
                     }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-
+                    System.out.println(returnChange);
                 }
             }
         }
