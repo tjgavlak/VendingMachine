@@ -1,19 +1,21 @@
 package com.techelevator.view;
 
-public class CustomerMoney {
-    private double balance = 0.0;
+import java.math.BigDecimal;
 
-    public double getBalance() {
+public class CustomerMoney {
+    private BigDecimal balance = new BigDecimal("0.00");
+
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void addMoney(double moneyInserted) {
-        this.balance += moneyInserted;
+    public void addMoney(BigDecimal moneyInserted) {
+        this.balance = (balance.add(moneyInserted));
     }
 
-    public void subtractMoney(double moneySubtracted) {
-        if (this.balance >= moneySubtracted) {
-            this.balance -= moneySubtracted;
+    public void subtractMoney(BigDecimal moneySubtracted) {
+        if (this.balance.compareTo(moneySubtracted) >= 0) {
+            this.balance = (balance.subtract(moneySubtracted)) ;
         }
     }
 }

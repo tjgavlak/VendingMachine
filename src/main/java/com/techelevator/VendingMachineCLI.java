@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -75,7 +76,7 @@ public class VendingMachineCLI {
 		for (String snack : inventory.keySet()) {
 			String slot = inventory.get(snack).getSlot();
 			String name = inventory.get(snack).getName();
-			double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+			BigDecimal price = inventory.get(snack).getPrice();
 
 			System.out.println(slot + " | " + name + " | " + price);
 
@@ -102,15 +103,15 @@ public class VendingMachineCLI {
 						double add = 0;
 						switch (feedMoneyOptions) {
 							case FEED_ONE:
-								currentTransaction.addMoney(1.00);
+								currentTransaction.addMoney(BigDecimal.valueOf(1.00));
 								add += 1.00;
 								break;
 							case FEED_TWO:
-								currentTransaction.addMoney(2.00);
+								currentTransaction.addMoney(BigDecimal.valueOf(2.00));
 								add += 2.00;
 								break;
 							case FEED_FIVE:
-								currentTransaction.addMoney(5.00);
+								currentTransaction.addMoney(BigDecimal.valueOf(5.00));
 								add += 5.00;
 								break;
 							case PURCHASE_MENU_OPTION_SELECT_PRODUCT: // User is done adding money, ready to purchase
@@ -118,7 +119,7 @@ public class VendingMachineCLI {
 								for (String snack : inventory.keySet()) {
 									String slot = inventory.get(snack).getSlot();
 									String name = inventory.get(snack).getName();
-									double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+									BigDecimal price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
 
 									System.out.println(slot + " | " + name + " | " + price);
 
@@ -128,7 +129,7 @@ public class VendingMachineCLI {
 										System.out.println("SOLD OUT");
 									}
 								}
-								System.out.println("Please enter an item number.");
+								System.out.println("Please enter item code: ");
 								String itemChoice = userInput.nextLine().toUpperCase();
 								break;
 						}
@@ -138,15 +139,15 @@ public class VendingMachineCLI {
 				// If user choice is Select Product
 				} else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
 					// If user balance is 0
-					if (currentTransaction.getBalance() <= 0) {
+					if (currentTransaction.getBalance().compareTo(BigDecimal.valueOf(0.00)) < 0) {
 						System.out.println("Please give us money.");
-						//purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FEED_MONEY);
+						break;
 					} else { // If balance is greater than 0
 						System.out.println("Choices: ");
 						for (String snack : inventory.keySet()) {
 							String slot = inventory.get(snack).getSlot();
 							String name = inventory.get(snack).getName();
-							double price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
+							BigDecimal price = inventory.get(snack).getPrice(); //TODO BigDecimal for money
 
 							System.out.println(slot + " | " + name + " | " + price);
 
@@ -155,6 +156,18 @@ public class VendingMachineCLI {
 							} else {
 								System.out.println("SOLD OUT");
 							}
+						}
+						System.out.println("Please enter item code: ");
+						String itemChoice = userInput.nextLine().toUpperCase();
+						if (currentTransaction.getBalance().compareTo(inventory.get(itemChoice).getPrice()) < 0) {
+							System.out.println("Insufficient funds.");
+							break;
+						} else {
+							if (inventory.get(itemChoice).getQuantity() >= 0) {
+								currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice());
+								
+							}
+
 						}
 					}
 				}

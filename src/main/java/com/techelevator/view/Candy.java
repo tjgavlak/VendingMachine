@@ -3,11 +3,16 @@ package com.techelevator.view;
 import java.math.BigDecimal;
 
 public class Candy implements Product {
-    private String name = "";
-    private String slot = "";
-    private Double price = 0.00;
-    private int quantity = 5;
-    private BigDecimal balance = new BigDecimal(0.00) ;
+    /*Candy moonpie =  new Candy();
+    Candy cowtales = new Candy();
+    Candy wonkaBar = new Candy();
+    Candy crunchie = new Candy();*/
+    public String name = "";
+    public String slot = "";
+    public BigDecimal price = new BigDecimal(0.00);
+    public int quantity = 5;
+    public BigDecimal balance = new BigDecimal(0.00) ;
+
 
     @Override
     public String getName() {
@@ -28,11 +33,11 @@ public class Candy implements Product {
     }
 
     @Override
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -61,7 +66,7 @@ public class Candy implements Product {
         this.balance = balance;
     }
 
-    public String dispenseItem(String getName, String getPrice, BigDecimal getBalance) {
+    public String dispenseItem(String getName, BigDecimal getPrice, BigDecimal getBalance) {
         String returnMessage = "";
         if (this.quantity == 0) {
             returnMessage += "This item is sold out.";

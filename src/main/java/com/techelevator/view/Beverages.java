@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class Beverages implements Product {
     private String name = "";
     private String slot = "";
-    private Double price = 0.00;
+    private BigDecimal price = new BigDecimal(0.00);
     private int quantity = 5;
     private BigDecimal balance = new BigDecimal(0.00) ;
 
@@ -28,11 +28,11 @@ public class Beverages implements Product {
     }
 
     @Override
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -61,7 +61,7 @@ public class Beverages implements Product {
         this.balance = balance;
     }
 
-    public String dispenseItem(String getName, String getPrice, BigDecimal getBalance) {
+    public String dispenseItem(String getName, BigDecimal getPrice, BigDecimal getBalance) {
         String returnMessage = "";
         if (this.quantity == 0) {
             returnMessage += "This item is sold out.";

@@ -2,6 +2,7 @@ package com.techelevator.view;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,28 +27,28 @@ public class VendingMachineChoices {
                         Chips chips = new Chips();
                         chips.setSlot(splitLine[0]);
                         chips.setName(splitLine[1]);
-                        chips.setPrice(Double.parseDouble(splitLine[2]));
+                        chips.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         snackChoices.put(splitLine[0], chips);
                         break;
                     case 'B':
                         Candy candy = new Candy();
                         candy.setSlot(splitLine[0]);
                         candy.setName(splitLine[1]);
-                        candy.setPrice(Double.parseDouble(splitLine[2]));
+                        candy.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         snackChoices.put(splitLine[0], candy);
                         break;
                     case 'C':
                         Beverages beverages = new Beverages();
                         beverages.setSlot(splitLine[0]);
                         beverages.setName(splitLine[1]);
-                        beverages.setPrice(Double.parseDouble(splitLine[2]));
+                        beverages.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         snackChoices.put(splitLine[0], beverages);
                         break;
                     case 'D':
                         Gum gum = new Gum();
                         gum.setSlot(splitLine[0]);
                         gum.setName(splitLine[1]);
-                        gum.setPrice(Double.parseDouble(splitLine[2]));
+                        gum.setPrice(BigDecimal.valueOf(Double.parseDouble(splitLine[2])));
                         snackChoices.put(splitLine[0], gum);
                         break;
                 }
