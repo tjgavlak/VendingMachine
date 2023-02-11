@@ -145,8 +145,8 @@ public class VendingMachineCLI {
                                 purchaseItems();
                             }  else {
                                 purchaseMenuOption = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
-//                                if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-//                                }
+                                if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
+                                }
                             }
                         }
                     }
