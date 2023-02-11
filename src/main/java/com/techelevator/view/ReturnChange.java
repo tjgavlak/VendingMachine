@@ -1,32 +1,34 @@
 package com.techelevator.view;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReturnChange {
-    public static String returnChange (double currentTransaction) {
-        Coin[] coins = new Coin[] {new Quarter(), new Dime(), new Nickel()};
-        int quarters = 0;
-        int dimes = 0;
-        int nickels = 0;
-        currentTransaction *= 100;
+    public static String returnChange(BigDecimal currentTransaction) {
+        Coin[] coins = new Coin[]{new Quarter(), new Dime(), new Nickel()};
+        BigDecimal zeroBalance = new BigDecimal("0.00");
+        String result = "";
+        Map<Coin, Double> changeMap = new HashMap<Coin, Double>();
 
         for (Coin coin : coins) { //iterate through coin array
-            double change = currentTransaction / coin.getValue();
-            if (currentTransaction == 0) {
+//            double change = currentTransaction / coin.getValue();
+            if (currentTransaction.equals(zeroBalance)) {
                 break;
-            } else if (change % 25 == 0) {
-                quarters++;
-                change -= 25;
-            } else if (change % 10 == 0) {
-                dimes++;
-                change -= 10;
-            } else {
-                nickels++;
-                change -= 5;
+            }
+            double change = Double.parseDouble(String.valueOf(currentTransaction));
+            change = change / Double.parseDouble(String.valueOf(coin.getValue()));
+            if (change > 0) {
+                currentTransaction = currentTransaction.remainder(coin.getValue().multiply(BigDecimal.valueOf(change)));
+                changeMap.put(coin, change);
             }
         }
+//        System.out.println("Your change is: ");
+        for (Coin coin : changeMap.keySet()) {
 
-        String result = "Your change is " + quarters + " quarters, " + dimes + " dimes, and " + nickels + "nickels.";
+           result = (changeMap.get(coin) + ": " + coin.getName() + "(s) ");
+        }
         return result;
+
     }
 }

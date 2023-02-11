@@ -10,7 +10,7 @@ public class Dime implements Coin {
     }
 
     @Override
-    public int getValue() {
-        return 10;
+    public BigDecimal getValue() {
+        return new BigDecimal("0.10");
     }
 }

@@ -10,7 +10,7 @@ public class Quarter implements Coin{
     }
 
     @Override
-    public int getValue() {
-        return 25;
+    public BigDecimal getValue() {
+        return new BigDecimal("0.25") ;
     }
 }

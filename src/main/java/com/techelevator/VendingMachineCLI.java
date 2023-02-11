@@ -43,7 +43,6 @@ public class VendingMachineCLI {
     VendingMachineChoices snackChoices = new VendingMachineChoices();
     Map<String, Product> inventory = snackChoices.getMapOfProduct();
     CustomerMoney currentTransaction = new CustomerMoney();
-    Double change = Double.parseDouble(String.valueOf(currentTransaction));
     ReturnChange returnChange = new ReturnChange();
 
     File logFile = new File("log.txt"); // TODO consider making a logger class to handle this
@@ -64,7 +63,6 @@ public class VendingMachineCLI {
                     break;
                 // display vending machine items
                 case MAIN_MENU_OPTION_EXIT:
-                    ReturnChange.returnChange(change);
                     running = false;
                     break;
             }
@@ -136,22 +134,26 @@ public class VendingMachineCLI {
                         if (currentTransaction.getBalance().compareTo(inventory.get(itemChoice).getPrice()) < 0) {
                             System.out.println("Insufficient funds.");
                             break;
-                        } else {
-                            if (inventory.get(itemChoice).getQuantity() >= 0) {
-                                currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
-                                // Reduces quantity of that item by 1
-                                Product product = inventory.get(itemChoice);
-                                product.dispenseItem(product);
-                                product.getMessage();
-                                String buyMore = userInput.nextLine();
-                                if (buyMore.equalsIgnoreCase("Y")) {
-                                    purchaseItems();
-                                } else menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
+                        } else if (inventory.get(itemChoice).getQuantity() >= 0) {
+                            currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
+                            // Reduces quantity of that item by 1
+                            Product product = inventory.get(itemChoice);
+                            product.dispenseItem(product);
+                            product.getMessage();
+                            String buyMore = userInput.nextLine();
+                            if (buyMore.equalsIgnoreCase("Y")) {
+                                purchaseItems();
+                            }  else {
+                                purchaseMenuOption = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+//                                if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
+//                                }
                             }
                         }
                     }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-                    System.out.println(returnChange);
+                    System.out.println("Your change is: "  + ReturnChange.returnChange(currentTransaction.getBalance()));
+                    isCustomer = false;
+                    purchaseMenuOption = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
                 }
             }
         }

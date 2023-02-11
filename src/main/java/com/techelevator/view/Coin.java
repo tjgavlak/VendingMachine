@@ -4,5 +4,5 @@ import java.math.BigDecimal;
 
 public interface Coin {
     String getName();
-    int getValue();
+    BigDecimal getValue();
 }
