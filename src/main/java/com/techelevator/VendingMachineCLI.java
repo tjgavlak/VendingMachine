@@ -26,10 +26,8 @@ public class VendingMachineCLI {
     private static final String FEED_QUIT = "Return to Purchase Menu";
     private static final String[] FEED_MENU_OPTIONS = {FEED_ONE, FEED_TWO, FEED_FIVE, FEED_QUIT};
 
-
     private static final String[] MAIN_MENU_OPTIONS = {MAIN_MENU_OPTION_DISPLAY_ITEMS, MAIN_MENU_OPTION_PURCHASE, MAIN_MENU_OPTION_EXIT, MAIN_MENU_SECRET_OPTION};
     private static final String[] PURCHASE_MENU_OPTIONS = {PURCHASE_MENU_OPTION_FEED_MONEY, PURCHASE_MENU_OPTION_SELECT_PRODUCT, PURCHASE_MENU_OPTION_FINISH_TRANSACTION};
-    private static final String[] PRODUCT_OPTIONS = {};
 
     private VendingMenu menu;
 
@@ -84,7 +82,7 @@ public class VendingMachineCLI {
     }
 
     // Runs when user chooses to make purchase
-    public void purchaseItems() throws NullPointerException {
+    public void purchaseItems() throws IOException {
             Scanner userInput = new Scanner(System.in);
             System.out.println("Current balance: " + currentTransaction.getBalance());
             String purchaseMenuOption = String.valueOf(menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS));
@@ -126,26 +124,25 @@ public class VendingMachineCLI {
                         break;
                     } else { // If balance is greater than 0
                             displayItems();
-                            System.out.println(currentTransaction.getBalance());
+                            System.out.println("Current Balance: " + currentTransaction.getBalance());
                             System.out.println("Please enter item code: ");
                             String itemChoice = userInput.nextLine().toUpperCase();
                             Product product = inventory.get(itemChoice);
-                            if (!itemChoice.equals(product.getSlot())) {
-                                System.out.println("Please enter a valid item code.");
-                                purchaseItems();
-                            } else {
+                            try {
                                 if (currentTransaction.getBalance().compareTo(product.getPrice()) < 0) {
                                     System.out.println("Insufficient funds.");
                                     break;
                                 } else if (inventory.get(itemChoice).getQuantity() > 0) {
                                     currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
-//                                Product product = inventory.get(itemChoice);
                                     product.dispenseItem(product);
                                     product.getMessage();
                                     purchaseItems();
                                 }
+                        } catch (NullPointerException e) {
+                                System.out.println("Please enter a valid item code.");
+                                purchaseItems();
                             }
-                        }
+                    }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
                     String change = ReturnChange.returnChange(currentTransaction.getBalance());
                     System.out.println("Your change is: " + change);

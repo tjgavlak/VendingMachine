@@ -29,4 +29,14 @@ class ReturnChangeTest {
         // Assert
         assertEquals(expected, actual);
     }
+
+    @Test
+    void test_for_substantial_change() {
+        BigDecimal testTransaction = new BigDecimal(200.15);
+        String expected = "800 Quarter(s) 1 Dime(s) 1 Nickel(s) ";
+        // Act
+        String actual = ReturnChange.returnChange(testTransaction);
+        // Assert
+        assertEquals(expected, actual);
+    }
 }
