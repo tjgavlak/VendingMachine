@@ -6,6 +6,5 @@ public class Beverages extends Product {
     public void getMessage() {
 
         System.out.println("Glug Glug, Chug Chug!");
-        System.out.println("Would you like something else? Y/N");
     }
 }

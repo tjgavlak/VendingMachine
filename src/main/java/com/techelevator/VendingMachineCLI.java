@@ -41,15 +41,8 @@ public class VendingMachineCLI {
     Map<String, Product> inventory = snackChoices.getMapOfProduct();
     CustomerMoney currentTransaction = new CustomerMoney();
     ReturnChange returnChange = new ReturnChange();
+    TransactionLog logWriter = new TransactionLog();
 
-    LocalDateTime localDateTime = LocalDateTime.now();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy hh:mm:ss a");
-    String dateText = localDateTime.format(formatter);
-    LocalDateTime parseDateTime = localDateTime.parse(dateText, formatter);
-    List<String> audit = new ArrayList<>();
-    File log = new File("Log.txt");
-
-    Scanner scanner = new Scanner(System.in);
 
     public void run() throws IOException {
         boolean running = true;
@@ -91,7 +84,7 @@ public class VendingMachineCLI {
     }
 
     // Runs when user chooses to make purchase
-    public void purchaseItems() throws IOException {
+    public void purchaseItems() throws NullPointerException {
             Scanner userInput = new Scanner(System.in);
             System.out.println("Current balance: " + currentTransaction.getBalance());
             String purchaseMenuOption = String.valueOf(menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS));
@@ -122,7 +115,8 @@ public class VendingMachineCLI {
                                 purchaseItems();
                                 break;
                         }
-                        audit.add(parseDateTime + " FEED MONEY: " + "$" + String.format("%.2f", add) + " " + String.format("%.2f", currentTransaction.getBalance()));// TODO Print to log here
+                        String feedMoneyLog = "FEED MONEY: " + "$" + add + " " + "$" + currentTransaction.getBalance();
+                        logWriter.log(feedMoneyLog);
                     }
                     // If user choice is Select Product
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
@@ -131,36 +125,35 @@ public class VendingMachineCLI {
                         System.out.println("Please make a deposit.");
                         break;
                     } else { // If balance is greater than 0
-                        displayItems();
-                        System.out.println(currentTransaction.getBalance());
-                        System.out.println("Please enter item code: ");
-                        String itemChoice = userInput.nextLine().toUpperCase();
-                        if (currentTransaction.getBalance().compareTo(inventory.get(itemChoice).getPrice()) < 0) {
-                            System.out.println("Insufficient funds.");
-                            break;
-                        } else if (inventory.get(itemChoice).getQuantity() >= 0) {
-                            currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
+                            displayItems();
+                            System.out.println(currentTransaction.getBalance());
+                            System.out.println("Please enter item code: ");
+                            String itemChoice = userInput.nextLine().toUpperCase();
                             Product product = inventory.get(itemChoice);
-                            product.dispenseItem(product); //TODO build printToLog() into dispenseItems()
-                            product.getMessage();
-                            String buyMore = userInput.nextLine();
-                            if (buyMore.equalsIgnoreCase("Y")) {
+                            if (!itemChoice.equals(product.getSlot())) {
+                                System.out.println("Please enter a valid item code.");
                                 purchaseItems();
                             } else {
-                                purchaseMenuOption = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
+                                if (currentTransaction.getBalance().compareTo(product.getPrice()) < 0) {
+                                    System.out.println("Insufficient funds.");
+                                    break;
+                                } else if (inventory.get(itemChoice).getQuantity() > 0) {
+                                    currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
+//                                Product product = inventory.get(itemChoice);
+                                    product.dispenseItem(product);
+                                    product.getMessage();
+                                    purchaseItems();
+                                }
                             }
                         }
-                    }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-                    System.out.println("Your change is: " + ReturnChange.returnChange(currentTransaction.getBalance()));
-                    run();
-                    // audit.add(parseDateTime + " GIVE CHANGE: " + "$" + String.format("%.2f", currentTransaction.getBalance()) + " " + String.format("%.2f", 0.0));
-
-//                    for (String s : audit) {
-//                        logFileWriter.print(s);
-//                    }
-//                    logFileWriter.close();
+                    String change = ReturnChange.returnChange(currentTransaction.getBalance());
+                    System.out.println("Your change is: " + change);
+                    String changeLog = "GIVE CHANGE: " +  "$" + currentTransaction.getBalance() + " $0.00"; // ¯\_(ツ)_/¯
+                    currentTransaction.subtractMoney(currentTransaction.getBalance());
+                    logWriter.log(changeLog);
                 }
+                isCustomer = false;
             }
     }
 

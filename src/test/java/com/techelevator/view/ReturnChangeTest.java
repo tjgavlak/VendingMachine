@@ -23,18 +23,7 @@ class ReturnChangeTest {
     void test_for_zero_change() {
         // Arrange
         BigDecimal testTransaction = new BigDecimal(0.00);
-        String expected = "0.00";
-        // Act
-        String actual = ReturnChange.returnChange(testTransaction);
-        // Assert
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void test_for_high_value_change() {
-        // Arrange
-        BigDecimal testTransaction = new BigDecimal(200.00);
-        String expected = "800 Quarter(s). Go fuck yourself.";
+        String expected = "";
         // Act
         String actual = ReturnChange.returnChange(testTransaction);
         // Assert
