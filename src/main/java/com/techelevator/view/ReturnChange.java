@@ -14,7 +14,7 @@ public class ReturnChange {
         Map<Coin, Integer> changeMap = new HashMap<Coin, Integer>();
         for (Coin coin : coins) { //iterate through coin array
             if (balance == 0) {
-                result = "0.00";
+                result = "";
                 break;
             }
             int change = (int)balance / coin.getValue();

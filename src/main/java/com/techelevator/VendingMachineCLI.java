@@ -128,7 +128,7 @@ public class VendingMachineCLI {
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
                     // If user balance is 0
                     if (currentTransaction.getBalance().compareTo(BigDecimal.valueOf(0.00)) < 0) {
-                        System.out.println("Please give us money.");
+                        System.out.println("Please make a deposit.");
                         break;
                     } else { // If balance is greater than 0
                         displayItems();
@@ -140,7 +140,6 @@ public class VendingMachineCLI {
                             break;
                         } else if (inventory.get(itemChoice).getQuantity() >= 0) {
                             currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
-                            // Reduces quantity of that item by 1
                             Product product = inventory.get(itemChoice);
                             product.dispenseItem(product); //TODO build printToLog() into dispenseItems()
                             product.getMessage();
@@ -149,21 +148,18 @@ public class VendingMachineCLI {
                                 purchaseItems();
                             } else {
                                 purchaseMenuOption = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
-                                if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-                                }
                             }
                         }
                     }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
                     System.out.println("Your change is: " + ReturnChange.returnChange(currentTransaction.getBalance()));
-                    purchaseMenuOption = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
-                    audit.add(parseDateTime + " GIVE CHANGE: " + "$" + String.format("%.2f", currentTransaction.getBalance()) + " " + String.format("%.2f", 0.0));
-                    isCustomer = false;
+                    run();
+                    // audit.add(parseDateTime + " GIVE CHANGE: " + "$" + String.format("%.2f", currentTransaction.getBalance()) + " " + String.format("%.2f", 0.0));
 
-                    for (String s : audit) {
-                        logFileWriter.print(s);
-                    }
-                    logFileWriter.close();
+//                    for (String s : audit) {
+//                        logFileWriter.print(s);
+//                    }
+//                    logFileWriter.close();
                 }
             }
     }
