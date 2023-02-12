@@ -2,14 +2,11 @@ package com.techelevator;
 
 import com.techelevator.view.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 
 public class VendingMachineCLI {
@@ -45,7 +42,13 @@ public class VendingMachineCLI {
     CustomerMoney currentTransaction = new CustomerMoney();
     ReturnChange returnChange = new ReturnChange();
 
-    File logFile = new File("log.txt"); // TODO consider making a logger class to handle this
+    LocalDateTime localDateTime = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE, MMM dd, yyyy hh:mm:ss a");
+    String dateText = localDateTime.format(formatter);
+    LocalDateTime parseDateTime = localDateTime.parse(dateText, formatter);
+    List<String> audit = new ArrayList<>();
+    File log = new File("Log.txt");
+
     Scanner scanner = new Scanner(System.in);
 
     public void run() throws IOException {
@@ -89,8 +92,7 @@ public class VendingMachineCLI {
 
     // Runs when user chooses to make purchase
     public void purchaseItems() throws IOException {
-        Scanner userInput = new Scanner(System.in);
-        try (PrintWriter printToLog = new PrintWriter(logFile)) {
+            Scanner userInput = new Scanner(System.in);
             System.out.println("Current balance: " + currentTransaction.getBalance());
             String purchaseMenuOption = String.valueOf(menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS));
             boolean isCustomer = true;
@@ -120,6 +122,7 @@ public class VendingMachineCLI {
                                 purchaseItems();
                                 break;
                         }
+                        audit.add(parseDateTime + " FEED MONEY: " + "$" + String.format("%.2f", add) + " " + String.format("%.2f", currentTransaction.getBalance()));// TODO Print to log here
                     }
                     // If user choice is Select Product
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_SELECT_PRODUCT)) {
@@ -128,7 +131,8 @@ public class VendingMachineCLI {
                         System.out.println("Please give us money.");
                         break;
                     } else { // If balance is greater than 0
-                        displayItems();  //TODO Include current balance in this method
+                        displayItems();
+                        System.out.println(currentTransaction.getBalance());
                         System.out.println("Please enter item code: ");
                         String itemChoice = userInput.nextLine().toUpperCase();
                         if (currentTransaction.getBalance().compareTo(inventory.get(itemChoice).getPrice()) < 0) {
@@ -138,12 +142,12 @@ public class VendingMachineCLI {
                             currentTransaction.subtractMoney(inventory.get(itemChoice).getPrice()); // Takes their money
                             // Reduces quantity of that item by 1
                             Product product = inventory.get(itemChoice);
-                            product.dispenseItem(product);
+                            product.dispenseItem(product); //TODO build printToLog() into dispenseItems()
                             product.getMessage();
                             String buyMore = userInput.nextLine();
                             if (buyMore.equalsIgnoreCase("Y")) {
                                 purchaseItems();
-                            }  else {
+                            } else {
                                 purchaseMenuOption = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
                                 if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
                                 }
@@ -151,12 +155,17 @@ public class VendingMachineCLI {
                         }
                     }
                 } else if (purchaseMenuOption.equals(PURCHASE_MENU_OPTION_FINISH_TRANSACTION)) {
-                    System.out.println("Your change is: "  + ReturnChange.returnChange(currentTransaction.getBalance()));
-                    isCustomer = false;
+                    System.out.println("Your change is: " + ReturnChange.returnChange(currentTransaction.getBalance()));
                     purchaseMenuOption = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
+                    audit.add(parseDateTime + " GIVE CHANGE: " + "$" + String.format("%.2f", currentTransaction.getBalance()) + " " + String.format("%.2f", 0.0));
+                    isCustomer = false;
+
+                    for (String s : audit) {
+                        logFileWriter.print(s);
+                    }
+                    logFileWriter.close();
                 }
             }
-        }
     }
 
     public static void main(String[] args) throws Exception {

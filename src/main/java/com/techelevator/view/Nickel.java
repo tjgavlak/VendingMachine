@@ -11,7 +11,7 @@ public class Nickel implements Coin{
     }
 
     @Override
-    public BigDecimal getValue() {
-        return new BigDecimal(.05);
+    public int getValue() {
+        return 5;
     }
 }
